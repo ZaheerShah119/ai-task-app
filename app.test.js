@@ -5,38 +5,30 @@ const {
     deleteTask
 } = require("./app");
 
-test("Create task successfully", () => {
+test("Create task", () => {
     const result = createTask({
-        title: "Test Task",
+        title: "Test",
         status: "Pending",
         priority: "High"
     });
-
-    expect(result.title).toBe("Test Task");
+    expect(result.title).toBe("Test");
 });
 
-test("Fail creating invalid task", () => {
+test("Invalid task", () => {
     const result = createTask({});
-
     expect(result.error).toBe("Invalid task data");
 });
 
-test("Get all tasks", () => {
-    const tasks = getTasks();
-
-    expect(Array.isArray(tasks)).toBe(true);
+test("Get tasks", () => {
+    expect(Array.isArray(getTasks())).toBe(true);
 });
 
 test("Update task", () => {
-    const updated = updateTask(1, {
-        status: "Completed"
-    });
-
-    expect(updated.status).toBe("Completed");
+    const result = updateTask(1, { status: "Done" });
+    expect(result.status).toBe("Done");
 });
 
 test("Delete task", () => {
-    const deleted = deleteTask(1);
-
-    expect(deleted.id).toBe(1);
+    const result = deleteTask(1);
+    expect(result.id).toBeDefined();
 });

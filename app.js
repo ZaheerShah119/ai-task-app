@@ -4,7 +4,7 @@ const app = express();
 app.use(express.json());
 
 let tasks = [];
-let currentId = 1;
+let id = 1;
 
 function createTask(data) {
     if (!data.title || !data.status || !data.priority) {
@@ -12,7 +12,7 @@ function createTask(data) {
     }
 
     const task = {
-        id: currentId++,
+        id: id++,
         title: data.title,
         status: data.status,
         priority: data.priority
@@ -26,12 +26,9 @@ function getTasks() {
     return tasks;
 }
 
-function updateTask(id, data) {
-    const task = tasks.find(t => t.id == id);
-
-    if (!task) {
-        return { error: "Task not found" };
-    }
+function updateTask(taskId, data) {
+    const task = tasks.find(t => t.id == taskId);
+    if (!task) return { error: "Task not found" };
 
     task.title = data.title || task.title;
     task.status = data.status || task.status;
@@ -40,25 +37,21 @@ function updateTask(id, data) {
     return task;
 }
 
-function deleteTask(id) {
-    const index = tasks.findIndex(t => t.id == id);
-
-    if (index === -1) {
-        return { error: "Task not found" };
-    }
+function deleteTask(taskId) {
+    const index = tasks.findIndex(t => t.id == taskId);
+    if (index === -1) return { error: "Task not found" };
 
     return tasks.splice(index, 1)[0];
 }
 
 app.get("/", (req, res) => {
-    res.send("Smart Task Management API Running");
+    res.send("Smart Task API Running");
 });
 
-if (require.main === module) {
-    app.listen(3000, () => {
-        console.log("Server running on port 3000");
-    });
-}
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log("Server running on port " + PORT);
+});
 
 module.exports = {
     createTask,
